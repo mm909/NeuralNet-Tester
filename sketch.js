@@ -19,19 +19,17 @@ let percent_ele;
 var WBArray;
 
 function setup() {
-  createCanvas(400, 200).parent('container');
-  nn = new NeuralNetwork(784, 300, 10);
-  user_digit = createGraphics(200, 200);
+  createCanvas(500, 500).parent('container');
+  nn = new NeuralNetwork(784, 40, 10);
+  user_digit = createGraphics(500, 500);
   user_digit.pixelDensity(1);
 
   train_image = createImage(28, 28);
 
   user_guess_ele = select('#user_guess');
-  percent_ele = select('#percent');
 
   WBArray = $("#WB").text().split(" ")
   WBArray.splice(WBArray.length - 1, 1);
-  console.log(WBArray);
 
   let count = 0;
   for (var i = 0; i < nn.input_nodes; i++) {
@@ -75,7 +73,11 @@ function guessUserDigit() {
   let prediction = nn.predict(inputs);
   let guess = findMax(prediction);
   user_guess_ele.html(guess);
-  console.log(prediction);
+  for (var i = 0; i < 10; i++) {
+    let t = floor((prediction[i]) * 100)
+    t = (t > 0) ? t : 0;
+    $("#" + i).text(t);
+  }
   return img;
 }
 
@@ -84,19 +86,19 @@ function draw() {
   background(0);
 
   let user = guessUserDigit();
-  image(user, 0, 0);
   image(user_digit, 0, 0);
+  image(user, 0, 0);
 
   if (mouseIsPressed) {
     user_has_drawing = true;
     user_digit.stroke(255);
-    user_digit.strokeWeight(16);
+    user_digit.strokeWeight(36);
     user_digit.line(mouseX, mouseY, pmouseX, pmouseY);
   }
 }
 
 function keyPressed() {
-  if (key == ' ') {
+  if (keyCode == 67) {
     user_has_drawing = false;
     user_digit.background(0);
   }
