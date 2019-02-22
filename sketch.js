@@ -130,3 +130,31 @@ function normalizeAndWeigh(arr) {
     arr[i] = arr[i] / sum;
   }
 }
+
+function updateWeights() {
+  let count = 0;
+  for (var i = 0; i < nn.input_nodes; i++) {
+    for (var j = 0; j < nn.hidden_nodes; j++) {
+      nn.weights_ih.data[j][i] = parseFloat(WBArray[count]);
+      count++;
+    }
+  }
+
+  for (var i = 0; i < nn.hidden_nodes; i++) {
+    nn.bias_h.data[i] = parseFloat(WBArray[count]);
+    count++;
+  }
+
+  for (var i = 0; i < nn.hidden_nodes; i++) {
+    for (var j = 0; j < nn.output_nodes; j++) {
+      nn.weights_ho.data[j][i] = parseFloat(WBArray[count]);
+      count++;
+    }
+  }
+
+  for (var i = 0; i < nn.output_nodes; i++) {
+    nn.bias_o.data[i] = parseFloat(WBArray[count]);
+    count++;
+  }
+
+}
