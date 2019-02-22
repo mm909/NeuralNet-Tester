@@ -1,29 +1,15 @@
-let mnist;
-
-
-let train_index = 0;
-
-// testing variables
-let test_index = 0;
-let total_tests = 0;
-let total_correct = 0;
-
 let nn;
-let train_image;
-
 let user_digit;
-let user_has_drawing = false;
-
 let user_guess_ele;
-let percent_ele;
+let user_has_drawing = false;
 var WBArray;
 
 function setup() {
   createCanvas(500, 500).parent('container');
   nn = new NeuralNetwork(784, 40, 10);
+
   user_digit = createGraphics(500, 500);
   user_digit.pixelDensity(1);
-
   train_image = createImage(28, 28);
 
   user_guess_ele = select('#user_guess');
@@ -67,16 +53,28 @@ function guessUserDigit() {
   let inputs = [];
   img.resize(28, 28);
   img.loadPixels();
+  // console.log(img);
   for (let i = 0; i < 784; i++) {
-    inputs[i] = img.pixels[i * 4] / 255;
+    inputs[i] = img.pixels[(i * 4 + 0)];
+    inputs[i] += img.pixels[(i * 4 + 1)];
+    inputs[i] += img.pixels[(i * 4 + 2)];
+    inputs[i] /= 3;
+    inputs[i] /= 255;
   }
+  // console.log(inputs);
   let prediction = nn.predict(inputs);
   let guess = findMax(prediction);
   user_guess_ele.html(guess);
+  normalizeAndWeigh(prediction);
   for (var i = 0; i < 10; i++) {
-    let t = floor((prediction[i]) * 100)
+    let t = floor(prediction[i] * 100)
     t = (t > 0) ? t : 0;
     $("#" + i).text(t);
+    if (i == guess) {
+      $("#" + i).addClass("correct");
+    } else {
+      $("#" + i).removeClass("correct");
+    }
   }
   return img;
 }
@@ -91,7 +89,7 @@ function draw() {
 
   if (mouseIsPressed) {
     user_has_drawing = true;
-    user_digit.stroke(255);
+    user_digit.stroke(255, 200);
     user_digit.strokeWeight(36);
     user_digit.line(mouseX, mouseY, pmouseX, pmouseY);
   }
@@ -114,4 +112,21 @@ function findMax(arr) {
     }
   }
   return index;
+}
+
+function normalizeAndWeigh(arr) {
+  min = 100;
+  max = -100;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] > max) max = arr[i];
+    if (arr[i] < min) min = arr[i];
+  }
+  sum = 0;
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = (arr[i] - min) / (max - min);
+    sum += arr[i];
+  }
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = arr[i] / sum;
+  }
 }
