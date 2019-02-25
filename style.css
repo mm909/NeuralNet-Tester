@@ -5,6 +5,20 @@
 #DB5756
 #F1F1F1
 */
+.prettyCode {
+  position: relative;
+}
+
+.jumbotron {
+  position: relative;
+}
+
+.meButton {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
 .hiddenSight img {
   height: 50px;
   width: 50px;

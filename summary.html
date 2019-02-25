@@ -16,6 +16,11 @@
 <body>
   <div class="container">
     <div class="jumbotron titleJumbo">
+      <div class="meButton">
+        <p class="lead">
+          <a class="btn btn-outline-success" href="index.html" role="button"><b>Me!</b></a>
+        </p>
+      </div>
       <h1 class="display-4">Libraryless C MNIST</h1>
       <p class="lead">Recognize handwritten digits with 97.5% accuracy using single layer ANN and no libraries.</p>
       <hr class="my-4">
@@ -60,7 +65,13 @@
 
     <h5>Network Structure</h5>
     <p>I used several different structures while trying to reach my goal of 97.5% accuracy but I decied on this network structure: <span style="color:#49738C; font-weight: 500"> 784 Input Nodes : 300 Hidden Nodes : 10 Output Nodes</span> </p>
-    <pre class="prettyprint">
+    <div class="prettyCode">
+      <div class="meButton">
+        <p class="lead">
+          <a class="btn btn-outline-dark" href="https://github.com/mm909/CS783-MNIST-Single-Layer/blob/master/main.c" role="button"><b>Code</b></a>
+        </p>
+      </div>
+      <pre class="prettyprint">
   #define INPUTNODES  784
   #define HIDDENNODES 300
   #define OUTPUTNODES 10
@@ -72,10 +83,18 @@
   HO  = MatrixInitRandom( HIDDENNODES, OUTPUTNODES );
   O   = MatrixInitRandom(           1, OUTPUTNODES );
   OB  = MatrixInitRandom(           1, OUTPUTNODES );</pre>
+    </div>
+
     <br>
     <h5>Initial Weights and Biases</h5>
     <p>I used a <span style="color:#49738C; font-weight: 500"> custom unimodal normal distribution </span> centered at 0 with a standard deviation of 0.01 to initialize the weights and biases. </p>
-    <pre class="prettyprint">
+    <div class="prettyCode">
+      <div class="meButton">
+        <p class="lead">
+          <a class="btn btn-outline-dark" href="https://github.com/mm909/CS783-MNIST-Single-Layer/blob/master/include/shared.h" role="button"><b>Code</b></a>
+        </p>
+      </div>
+      <pre class="prettyprint">
   double normalRand(double center, double sd) {
     double int_max = INT_MAX;
     double sum = 0;
@@ -85,6 +104,7 @@
     return sum;
   }
 </pre>
+    </div>
 
     <h5>Training the Network</h5>
     <p>The training process from a high level is actualy really simple.</p>
@@ -93,7 +113,14 @@
       <li><span style="color:#49738C; font-weight: 500">Backpropagate the error </span> and update weights/biases.</li>
       <li>Goto 1</li>
     </ol>
-    <pre class="prettyprint">
+
+    <div class="prettyCode">
+      <div class="meButton">
+        <p class="lead">
+          <a class="btn btn-outline-dark" href="https://github.com/mm909/CS783-MNIST-Single-Layer/blob/master/include/shared.h" role="button"><b>Code</b></a>
+        </p>
+      </div>
+      <pre class="prettyprint">
   // For each epoch
   for (int j = 0; j &lt; NUMEPOCHS; j++) {
     // For every training image
@@ -105,9 +132,17 @@
     }
   }
 </pre>
+    </div>
     <h5>Testing the Network</h5>
     <p>To test the network we will give the network 10000 images it has never seen and judge the network's success basied on its accuracy on those images.</p>
-    <pre class="prettyprint">
+
+    <div class="prettyCode">
+      <div class="meButton">
+        <p class="lead">
+          <a class="btn btn-outline-dark" href="https://github.com/mm909/CS783-MNIST-Single-Layer/blob/master/include/shared.h" role="button"><b>Code</b></a>
+        </p>
+      </div>
+      <pre class="prettyprint">
   for (int i = 0; i &lt; test.size; i++) {
 
     // Get image prediction
@@ -131,6 +166,7 @@
     }
   }
 </pre>
+    </div>
     <h5>Results</h5>
     <p>Starting from scratch after only three epochs the network's output looks as follows: <span style="color:#49738C; font-weight: 500"> (784 Input Nodes : 300 Hidden Nodes : 10 Output Nodes)</span> </p>
     <pre class="prettyprint">
@@ -275,7 +311,7 @@
       <div class="col-sm">
         <div class="buttonSegment">
           <p class="lead">
-            <a class="btn btn-outline-dark" href="http://mikianmusser.com" role="button"><b>Me!</b></a>
+            <a class="btn btn-outline-success" href="http://mikianmusser.com" role="button"><b>Me!</b></a>
           </p>
         </div>
       </div>
