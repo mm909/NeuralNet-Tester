@@ -39,10 +39,10 @@ function setup() {
     nn.bias_o.data[i] = parseFloat(WBArray[count]);
     count++;
   }
-
 }
 
 let saveInputs;
+var hidden = 0;
 
 function guessUserDigit() {
   let img = user_digit.get();
@@ -80,7 +80,6 @@ function drawBars(prediction) {
     text(floor(prediction[i] * 100), (width / 2) + (i * (50)) + 18, height - prediction[i] * height + 16);
   }
 }
-var hidden = 0;
 
 function draw() {
   background(0);

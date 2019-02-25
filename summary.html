@@ -239,8 +239,11 @@
       </div>
     </div>
     <br>
-    <p>Unfortunately this does not tell us much, it looks pretty random. Lets try feeding it an image of a 0 and looking at those values again.</p>
+    <p>Unfortunately this does not tell us much, it looks pretty <span style="color:#49738C; font-weight: 500">random.</span> <br> Lets try feeding it an image of a 0 and looking at those values again.</p>
     <div class="hiddenSight">
+      <div class="imageRow">
+        <img src="images/0/0Input.jpg" alt="">
+      </div>
       <div class="imageRow">
         <img src="images/0/0.jpg" alt="">
         <img src="images/0/1.jpg" alt="">
@@ -254,8 +257,36 @@
         <img src="images/0/9.jpg" alt="">
       </div>
     </div>
-
-    <!-- <h5>JS Port</h5> -->
+    <br>
+    <p>We can see that different nodes catch different parts of the image. Most don't capture the whole image.</p>
+    <h5>JS Port</h5>
+    <p>
+      Finally after training, testing, and visualizing our network we can <span style="color:#49738C; font-weight: 500"> export those weights/biases for others to use. </span><br>
+      I imported those weights and biases and used code from my <a href="https://mm909.github.io/Flappy-Bird-NNV/">Flappy Bird NNV</a> <b>(Check it out!)</b> to create a browser application for users to test it out!
+    </p>
+    <div class="row buttonSegmentRow">
+      <div class="col-sm">
+        <div class="buttonSegment">
+          <p class="lead">
+            <a class="btn btn-outline-dark" href="index.html" role="button">Demo</a>
+          </p>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="buttonSegment">
+          <p class="lead">
+            <a class="btn btn-outline-dark" href="http://mikianmusser.com" role="button"><b>Me!</b></a>
+          </p>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="buttonSegment">
+          <p class="lead">
+            <a class="btn btn-outline-dark" href="https://github.com/mm909/CS783-MNIST-Single-Layer" role="button">Code</a>
+          </p>
+        </div>
+      </div>
+    </div>
     <div class="footer"></div>
   </div>
 </body>
