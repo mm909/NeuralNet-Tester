@@ -5,6 +5,10 @@
 #DB5756
 #F1F1F1
 */
+.jumbotron {
+  padding: 3rem 2rem !important;
+}
+
 .exampleImageContainer img {
   width: 100%;
   margin-bottom: 32px;
