@@ -1,18 +1,16 @@
 let nn;
 let user_digit;
-let user_guess_ele;
 let user_has_drawing = false;
 var WBArray;
 
 function setup() {
-  createCanvas(500, 500).parent('container');
+  createCanvas(1000, 500).parent('container');
   nn = new NeuralNetwork(784, 40, 10);
 
   user_digit = createGraphics(500, 500);
   user_digit.pixelDensity(1);
   train_image = createImage(28, 28);
 
-  user_guess_ele = select('#user_guess');
 
   WBArray = $("#WB").text().split(" ")
   WBArray.splice(WBArray.length - 1, 1);
@@ -46,10 +44,6 @@ function setup() {
 
 function guessUserDigit() {
   let img = user_digit.get();
-  if (!user_has_drawing) {
-    user_guess_ele.html('_');
-    return img;
-  }
   let inputs = [];
   img.resize(28, 28);
   img.loadPixels();
@@ -64,24 +58,32 @@ function guessUserDigit() {
   // console.log(inputs);
   let prediction = nn.predict(inputs);
   let guess = findMax(prediction);
-  user_guess_ele.html(guess);
   normalizeAndWeigh(prediction);
-  for (var i = 0; i < 10; i++) {
-    let t = floor(prediction[i] * 100)
-    t = (t > 0) ? t : 0;
-    $("#" + i).text(t);
-    if (i == guess) {
-      $("#" + i).addClass("correct");
-    } else {
-      $("#" + i).removeClass("correct");
-    }
-  }
+  drawBars(prediction);
   return img;
 }
 
+function drawBars(prediction) {
+  for (var i = 0; i < prediction.length; i++) {
+    let guess = findMax(prediction);
+    stroke(0)
+    if (i == guess) fill(0, 255, 0);
+    else fill(255, 255, 255);
+    rect((width / 2) + (i * (50)), height - prediction[i] * height, 50, prediction[i] * height);
+    textSize(32);
+    text(i, (width / 2) + (i * (50)) + 18, height - prediction[i] * height);
+    textSize(16);
+    fill(0)
+    text(floor(prediction[i] * 100), (width / 2) + (i * (50)) + 18, height - prediction[i] * height + 16);
+  }
+}
 
 function draw() {
   background(0);
+  fill(255);
+  text("Use 'c' to clear", width - 125, 20)
+  stroke(255);
+  line(width / 2, 0, width / 2, height);
 
   let user = guessUserDigit();
   image(user_digit, 0, 0);
@@ -89,7 +91,7 @@ function draw() {
 
   if (mouseIsPressed) {
     user_has_drawing = true;
-    user_digit.stroke(255, 200);
+    user_digit.stroke(255, 225);
     user_digit.strokeWeight(36);
     user_digit.line(mouseX, mouseY, pmouseX, pmouseY);
   }
@@ -156,5 +158,4 @@ function updateWeights() {
     nn.bias_o.data[i] = parseFloat(WBArray[count]);
     count++;
   }
-
 }

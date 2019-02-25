@@ -1,5 +1,32 @@
+/*
+#061324
+#49738C
+#A8C9DA
+#DB5756
+#F1F1F1
+*/
 #container {
   display: inline-block;
+}
+
+.buttonSegmentRow {
+  text-align: center;
+  justify-content: center;
+}
+
+.buttonSegment {
+  text-align: center;
+  justify-content: center;
+}
+
+.display-4 {
+  color: #061324;
+  font-weight: 500px !important;
+}
+
+.titleJumbo {
+  margin-top: 25px;
+  background-color: #A8C9DA !important;
 }
 
 .output {
@@ -18,7 +45,7 @@
 /* line 1, ../../sass/p5cdn/p5cssCDN.sass */
 body {
   /* background-color: #EFEFEF; */
-  background-color: #FFF7F8 !important;
+  background-color: #F1F1F1 !important;
 }
 
 /* line 6, ../../sass/p5cdn/p5cssCDN.sass */
