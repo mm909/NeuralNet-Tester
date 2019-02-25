@@ -42,6 +42,8 @@ function setup() {
 
 }
 
+let saveInputs;
+
 function guessUserDigit() {
   let img = user_digit.get();
   let inputs = [];
@@ -56,6 +58,7 @@ function guessUserDigit() {
     inputs[i] /= 255;
   }
   // console.log(inputs);
+  saveInputs = inputs;
   let prediction = nn.predict(inputs);
   let guess = findMax(prediction);
   normalizeAndWeigh(prediction);
@@ -77,6 +80,7 @@ function drawBars(prediction) {
     text(floor(prediction[i] * 100), (width / 2) + (i * (50)) + 18, height - prediction[i] * height + 16);
   }
 }
+var hidden = 0;
 
 function draw() {
   background(0);
@@ -96,6 +100,49 @@ function draw() {
     user_digit.strokeWeight(36);
     user_digit.line(mouseX, mouseY, pmouseX, pmouseY);
   }
+}
+
+function drawNodeWeights(k) {
+  for (var i = 0; i < 28; i++) {
+    for (var j = 0; j < 28; j++) {
+      if (WBArray[(784 * k) + (i * 28) + j] > 0) {
+        fill(0, 255, 0)
+      } else {
+        fill(255, 0, 0)
+      }
+      noStroke();
+      rect(i * 10, j * 10, 10, 10);
+    }
+  }
+  save(k + '.jpg');
+}
+
+let node = 0;
+let drawNodes = 0;
+
+function drawHiddenValues(weights, biases, inputs, i) {
+  for (var i = 0; i < 40; i++) {
+    for (var j = 0; j < 28; j++) {
+      for (var k = 0; k < 28; k++) {
+        var temp = (weights.data[i][(j * 28) + k] * inputs.data[(j * 28) + k])
+        if (temp > 0) {
+          fill(0, 255, 0)
+        } else {
+          fill(255, 0, 0)
+        }
+        noStroke();
+        rect(j * 10, k * 10, 10, 10);
+      }
+    }
+    save(i + '.jpg');
+    sleep(100);
+  }
+}
+
+function sleep(miliseconds) {
+  var currentTime = new Date().getTime();
+
+  while (currentTime + miliseconds >= new Date().getTime()) {}
 }
 
 function keyPressed() {

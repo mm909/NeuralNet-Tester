@@ -41,13 +41,9 @@ class NeuralNetwork {
 
       this.weights_ih = new Matrix(this.hidden_nodes, this.input_nodes);
       this.weights_ho = new Matrix(this.output_nodes, this.hidden_nodes);
-      // this.weights_ih.randomize();
-      // this.weights_ho.randomize();
 
       this.bias_h = new Matrix(this.hidden_nodes, 1);
       this.bias_o = new Matrix(this.output_nodes, 1);
-      // this.bias_h.randomize();
-      // this.bias_o.randomize();
     }
 
     // TODO: copy these as well
@@ -63,7 +59,6 @@ class NeuralNetwork {
     hidden.addBias(this.bias_h);
     // activation function!
     hidden.map(this.activation_function.func);
-
     // Generating the output's output!
     let output = Matrix.multiply(this.weights_ho, hidden);
     output.addBias(this.bias_o);

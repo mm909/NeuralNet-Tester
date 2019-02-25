@@ -5,6 +5,21 @@
 #DB5756
 #F1F1F1
 */
+.hiddenSight img {
+  height: 50px;
+  width: 50px;
+}
+
+.hiddenSight {
+  background-color: #ebf8ff;
+  text-align: center;
+  padding: 15px 0px;
+}
+
+.imageRow {
+  margin-bottom: 5px;
+}
+
 .codeHighlight {
   color: yellow !important;
 }
