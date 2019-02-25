@@ -5,6 +5,14 @@
 #DB5756
 #F1F1F1
 */
+.codeHighlight {
+  color: yellow !important;
+}
+
+.footer {
+  height: 150px;
+}
+
 #container {
   display: inline-block;
 }

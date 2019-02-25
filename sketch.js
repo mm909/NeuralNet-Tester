@@ -69,9 +69,9 @@ function drawBars(prediction) {
     stroke(0)
     if (i == guess) fill(0, 255, 0);
     else fill(255, 255, 255);
-    rect((width / 2) + (i * (50)), height - prediction[i] * height, 50, prediction[i] * height);
+    rect((width / 2) + (i * (50)), height - prediction[i] * height, 49, prediction[i] * height);
     textSize(32);
-    text(i, (width / 2) + (i * (50)) + 18, height - prediction[i] * height);
+    text(i, (width / 2) + (i * (49)) + 18, height - prediction[i] * height);
     textSize(16);
     fill(0)
     text(floor(prediction[i] * 100), (width / 2) + (i * (50)) + 18, height - prediction[i] * height + 16);
@@ -82,8 +82,9 @@ function draw() {
   background(0);
   fill(255);
   text("Use 'c' to clear", width - 125, 20)
+  text("Draw below", (width / 4) - 50, 20)
   stroke(255);
-  line(width / 2, 0, width / 2, height);
+  line((width / 2) - 2, 0, (width / 2) - 2, height);
 
   let user = guessUserDigit();
   image(user_digit, 0, 0);

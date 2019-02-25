@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <title>mnist</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="pretty.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="jumbotron titleJumbo">
+      <h1 class="display-4">Libraryless C MNIST</h1>
+      <p class="lead">Recognize handwritten digits with 97.5% accuracy using single layer ANN and no libraries.</p>
+      <hr class="my-4">
+      <div class="row buttonSegmentRow">
+        <div class="col-sm">
+          <div class="buttonSegment">
+            <p class="lead">
+              <a class="btn btn-outline-light" href="index.html" role="button">Demo</a>
+            </p>
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="buttonSegment">
+            <p class="lead">
+              <a class="btn btn-outline-light" href="https://github.com/mm909/CS783-MNIST-Single-Layer" role="button">Code</a>
+            </p>
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="buttonSegment">
+            <p class="lead">
+              <a class="btn btn-outline-light" href="http://yann.lecun.com/exdb/mnist/" role="button">Dataset</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <p style="color: #061324"><span style="color:#49738C; font-weight: 500">Technologies used:</span> C, Artifical neural network, hand calculated backpropagation, linear algebra, multivariable calculus, image processing</p>
+    </div>
+
+    <h4>Task: Recognize a handwritten digit using a single layer neural network in C without any libraries.</h4>
+    <br>
+
+    <h5><i>Some context</i></h5>
+
+    <p>
+      After completing <a href="https://github.com/mm909/CS783-ANN-OnlineTraining"> my first artifical neural network </a> that successfully classified XOR, AND, NAND, and not XOR, I had a complete neural network library. <br>
+      With some minor tweaks and adjustments I used that library to solve the MNIST dataset with a 97.5% accuracy. <br>
+    </p>
+
+    <p>The following are the <span style="color:#49738C; font-weight: 500">highlights</span> of this project.</p>
+    <br>
+
+    <h5>Network Structure</h5>
+    <p>I used several different structures while trying to reach my goal of 97.5% accuracy but I decied on this network structure: <span style="color:#49738C; font-weight: 500"> 784 Input Nodes : 300 Hidden Nodes : 10 Output Nodes</span> </p>
+    <pre class="prettyprint">
+  #define INPUTNODES  784
+  #define HIDDENNODES 300
+  #define OUTPUTNODES 10
+
+  I   = MatrixInitRandom(           1, INPUTNODES  );
+  IH  = MatrixInitRandom(  INPUTNODES, HIDDENNODES );
+  H   = MatrixInitRandom(           1, HIDDENNODES );
+  HB  = MatrixInitRandom(           1, HIDDENNODES );
+  HO  = MatrixInitRandom( HIDDENNODES, OUTPUTNODES );
+  O   = MatrixInitRandom(           1, OUTPUTNODES );
+  OB  = MatrixInitRandom(           1, OUTPUTNODES );</pre>
+    <br>
+    <h5>Initial Weights and Biases</h5>
+    <p>I used a <span style="color:#49738C; font-weight: 500"> custom unimodal normal distribution </span> centered at 0 with a standard deviation of 0.01 to initialize the weights and biases. </p>
+    <pre class="prettyprint">
+  double normalRand(double center, double sd) {
+    double int_max = INT_MAX;
+    double sum = 0;
+    for (size_t i = 0; i &lt; 12; i++) sum += (float) rand() / RAND_MAX;
+    sum -= 6 + center;
+    sum *= sd;
+    return sum;
+  }
+</pre>
+
+    <h5>Training the Network</h5>
+    <p>The training process from a high level is actualy really simple.</p>
+    <ol>
+      <li>Feed a training image through the network.</li>
+      <li><span style="color:#49738C; font-weight: 500">Backpropagate the error </span> and update weights/biases.</li>
+      <li>Goto 1</li>
+    </ol>
+    <pre class="prettyprint">
+  // For each epoch
+  for (int j = 0; j &lt; NUMEPOCHS; j++) {
+    // For every training image
+    for (int i = 0; i &lt; train.size; i++) {
+      // Feed the image through the network
+      feedForrward(&I, &IH, &H, &HB, &HO, &O, &OB, &ANS, &ERR, &train, i);
+      // Back propagate the error
+      backProp(&I, &IH, &H, &HB, &HO, &O, &OB, &ANS, &ERR);
+    }
+  }
+</pre>
+    <h5>Testing the Network</h5>
+    <p>To test the network we will give the network 10000 images it has never seen and judge the network's success basied on its accuracy on those images.</p>
+    <pre class="prettyprint">
+  for (int i = 0; i &lt; test.size; i++) {
+
+    // Get image prediction
+    feedForrward(&I, &IH, &H, &HB, &HO, &O, &OB, &ANS, &ERR, &test, i);
+
+    // Find the highest output
+    highest = 0; index = 0;
+    for (int j = 0; j &lt; O.c; j++) {
+      if (O.data[0][j] &gt; highest) {
+        index = j;
+        highest = O.data[0][j];
+      }
+    }
+
+    // Check if the guess is correct
+    if (ANS.data[0][index] == 1) correctCount += 1;
+    else {
+      for (size_t i = 0; i &lt; ANS.c; i++) {
+        if(ANS.data[0][i] == 1) errors[i]++;
+      }
+    }
+  }
+</pre>
+    <h5>Results</h5>
+    <p>Starting from scratch after only three epochs the network's output looks as follows: <span style="color:#49738C; font-weight: 500"> (784 Input Nodes : 300 Hidden Nodes : 10 Output Nodes)</span> </p>
+    <pre class="prettyprint">
+  ---------------- CS783 - MNIST - Mikian Musser ----------------
+
+  --------------------    Fetching Image     --------------------
+
+  Read 60000 images
+  Read 10000 images
+
+  -------------------- Environment Variables --------------------
+
+  Random Seed                : 1551066110
+  Normal Distribution Center : 0
+  Normal Distribution SD     : 0.01
+  Learning Rate              : 0.001
+  Number of Epochs           : 3
+
+  --------------------     Network Shape     --------------------
+
+  Input            :    1 X  784
+  Input  -&gt; Hidden :  784 X  300
+  Hidden           :    1 X  300
+  Hidden Bias      :    1 X  300
+  Hidden -&gt; Output :  300 X   10
+  Output           :    1 X   10
+  Output Bias      :    1 X   10
+  Answer           :    1 X   10
+  Error            :    1 X   10
+
+  --------------------       Data Shape      --------------------
+
+  Train Size       :       60000
+  Test Size        :       10000
+
+  --------------------    Training Network   --------------------
+
+  Time 353s --- Epoch 2 ---  Image 60000 --- Accuracy 88.858%
+
+  --------------------    Testing Network    --------------------
+
+  Time 368s --- TESTING ---  Image 10000 --- Accuracy 90.17%
+
+  Incorrect Counts
+    0:  27
+    1:  33
+    2: 150
+    3:  99
+    4: 103
+    5: 196
+    6:  38
+    7: 119
+    8: 120
+    9:  98
+</pre>
+    <!-- <h5>Inside the network</h5>
+
+    <h5>JS Port</h5> -->
+    <div class="footer"></div>
+  </div>
+</body>
+
+</html>
