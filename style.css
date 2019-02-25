@@ -5,6 +5,11 @@
 #DB5756
 #F1F1F1
 */
+.exampleImageContainer img {
+  width: 100%;
+  margin-bottom: 32px;
+}
+
 .prettyCode {
   position: relative;
 }
